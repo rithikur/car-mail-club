@@ -1,23 +1,76 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DotGrid from './components/DotGrid/DotGrid';
 import GooeyNav from './components/GooeyNav/GooeyNav';
 import BlurText from './components/BlurText/BlurText';
+import ScrollReveal from './components/ScrollReveal/ScrollReveal';
+import MagicRings from './components/MagicRings/MagicRings';
+import ScrambleText from './components/ScrambleText/ScrambleText';
+import NothingNav from './components/NothingNav/NothingNav';
+import Preloader from './components/Preloader/Preloader';
+import ProcessSection from './components/ProcessSection/ProcessSection';
+import SplashCursor from './components/SplashCursor/SplashCursor';
 import './index.css';
 
 function App() {
-  const navItems = [
-    { label: "The Boxes", href: "#boxes" },
-    { label: "How it Works", href: "#how-it-works" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "About Us", href: "#about" },
-    { label: "Contact", href: "#contact" }
-  ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const marqueeRef = useRef(null);
+  const marqueeTextRef = useRef(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const lenis = new Lenis({
+      duration: 2.5,
+      smoothWheel: true,
+      wheelMultiplier: 0.8,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const ticker = (time) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(ticker);
+    gsap.ticker.lagSmoothing(0);
+
+    // Marquee Animation
+    if (marqueeTextRef.current) {
+      gsap.to(marqueeTextRef.current, {
+        xPercent: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: marqueeRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(ticker);
+    };
+  }, []);
 
 
   return (
-    <div className="app-container">
-      {/* Dynamic Background */}
-      <div className="dot-grid-container">
+    <>
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+      
+      {/* Global Grid Overlay */}
+      <div className="global-grid-lines">
+        <div></div><div></div><div></div><div></div>
+      </div>
+
+      <div className="app-container">
+        {/* Dynamic Background */}
+        <div className="dot-grid-container">
         <DotGrid
           dotSize={6}
           gap={30}
@@ -33,71 +86,192 @@ function App() {
 
       {/* Header */}
       <header className="header">
-        <div className="logo">
-          Car<span>Mail</span>Club
-        </div>
-        <div className="nav-wrapper">
-          <GooeyNav
-            items={navItems}
-            particleCount={15}
-            particleDistances={[90, 10]}
-            particleR={100}
-            initialActiveIndex={0}
-            animationTime={600}
-            timeVariance={300}
-            colors={[1, 2, 3, 1, 2, 3, 1, 4]}
-          />
-        </div>
-        <div className="header-right">
-          {/* Empty space to balance the logo and perfectly center the nav */}
-        </div>
+        <div className="logo">CAR MAIL CLUB</div>
+        <button className="menu-btn" onClick={() => setIsNavOpen(true)}>
+          <ScrambleText text="MODELS +" speed={40} delay={500} />
+        </button>
       </header>
 
       {/* Main Hero Section */}
       <main className="hero">
+        <SplashCursor 
+          RAINBOW_MODE={false} 
+          COLOR="#ffffff" 
+          BACK_COLOR={{r: 0, g: 0, b: 0}}
+          TRANSPARENT={true}
+          SPLAT_RADIUS={0.3}
+        />
         <div className="hero-content">
-          <div className="hero-badge">Premium Subscription</div>
-          
           <BlurText
-            text="The Ultimate Box for Gearheads"
+            text="ENGINEERED TO PERFECTION"
             delay={150}
             animateBy="words"
             direction="top"
             className="hero-title"
           />
-          
-          <BlurText
-            text="Curated car parts, exclusive detailing supplies, and automotive lifestyle gear delivered straight to your garage every month. Ignite your passion for driving."
-            delay={50}
-            animateBy="words"
-            direction="bottom"
-            className="hero-description"
-          />
-          
-          <div className="cta-group">
-            <button className="btn btn-primary" id="join-club-btn">Join the Club</button>
-            <button className="btn btn-secondary" id="view-past-boxes-btn">View Past Boxes</button>
-          </div>
-        </div>
-
-        <div className="hero-stats">
-          <div className="features">
-            <div className="feature">
-              <span className="feature-value">10k+</span>
-              <span className="feature-label">Active Members</span>
-            </div>
-            <div className="feature">
-              <span className="feature-value">$150+</span>
-              <span className="feature-label">Value Per Box</span>
-            </div>
-            <div className="feature">
-              <span className="feature-value">100%</span>
-              <span className="feature-label">Enthusiast Approved</span>
-            </div>
+          <div className="hero-subtitle">
+            <ScrambleText text="[ SECTOR 07 // AUTOMOTIVE EXCELLENCE ]" speed={30} delay={1000} />
           </div>
         </div>
       </main>
+
+      {/* About Section */}
+      <section id="about" className="about-section">
+        <div className="magic-rings-wrapper">
+          <MagicRings
+            color="#333333"
+            colorTwo="#ffffff"
+            ringCount={3}
+            speed={0.5}
+            attenuation={5}
+            lineThickness={1}
+            baseRadius={0.25}
+            radiusStep={0.10}
+            scaleRate={0.05}
+            opacity={0.3}
+            blur={0}
+            noiseAmount={0.02}
+            rotation={0}
+            ringGap={1.5}
+            fadeIn={0.7}
+            fadeOut={0.5}
+            followMouse={false}
+            mouseInfluence={0}
+            hoverScale={1}
+            parallax={0}
+            clickBurst={false}
+          />
+        </div>
+        <div className="about-content">
+          <ScrollReveal
+            baseOpacity={0}
+            enableBlur={true}
+            baseRotation={0}
+            blurStrength={20}
+            textClassName="about-reveal-text"
+          >
+            "Cars have always interested you? Our genes have been influenced by cars. It cannot be avoided."
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Horizontal Marquee Section */}
+      <section className="marquee-section" ref={marqueeRef}>
+        <div className="marquee-container" ref={marqueeTextRef}>
+          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE — UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE — </div>
+        </div>
+      </section>
+
+      {/* Luxury Grid Section */}
+      <section className="grid-section">
+        <div className="luxury-grid">
+          <div className="grid-item">
+            <div className="grid-item-label"><ScrambleText text="01 // AERO" speed={30} delay={200} /></div>
+            <h3 className="grid-item-title">AERODYNAMICS</h3>
+          </div>
+          <div className="grid-item">
+            <div className="grid-item-label"><ScrambleText text="02 // PWR" speed={30} delay={400} /></div>
+            <h3 className="grid-item-title">POWERTRAIN</h3>
+          </div>
+          <div className="grid-item">
+            <div className="grid-item-label"><ScrambleText text="03 // CHS" speed={30} delay={600} /></div>
+            <h3 className="grid-item-title">CHASSIS</h3>
+          </div>
+          <div className="grid-item">
+            <div className="grid-item-label"><ScrambleText text="04 // INT" speed={30} delay={800} /></div>
+            <h3 className="grid-item-title">INTERIOR</h3>
+          </div>
+        </div>
+      </section>
+
+      {/* The Boxes / Inside Section */}
+      <section id="the-boxes" className="bento-section">
+        <div className="bento-header">
+           <h2 className="massive-text">INSIDE THE BOX</h2>
+        </div>
+        <div className="bento-grid">
+           <div className="bento-item item-large">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop" alt="Precision Gear" />
+              <div className="bento-overlay">
+                 <ScrambleText text="[ 01 // EXCLUSIVE PARTS ]" speed={30} delay={0} />
+              </div>
+           </div>
+           <div className="bento-item item-small offset-down">
+              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1964&auto=format&fit=crop" alt="Accessories" />
+              <div className="bento-overlay">
+                 <ScrambleText text="[ 02 // LIFESTYLE GEAR ]" speed={30} delay={200} />
+              </div>
+           </div>
+           <div className="bento-item item-small">
+              <img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974&auto=format&fit=crop" alt="Magazine" />
+              <div className="bento-overlay">
+                 <ScrambleText text="[ 03 // CURATED READS ]" speed={30} delay={400} />
+              </div>
+           </div>
+           <div className="bento-item item-wide">
+              <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?q=80&w=2071&auto=format&fit=crop" alt="Detailing" />
+              <div className="bento-overlay">
+                 <ScrambleText text="[ 04 // DETAILING KITS ]" speed={30} delay={600} />
+              </div>
+           </div>
+        </div>
+      </section>
+      
+      {/* How it Works / Process */}
+      <ProcessSection />
+      
+      {/* Contact / Select Model */}
+      <section id="contact" className="contact-section">
+         <h2 className="hero-title" style={{ textAlign: 'center', lineHeight: '0.8' }}>
+            SELECTING<br/>MODEL
+         </h2>
+      </section>
+
+      {/* Pricing / Reserve Now */}
+      <section id="pricing" className="rigid-grid" style={{ borderTop: 'none' }}>
+        {/* Row 1: Basic */}
+        <div className="rigid-cell">
+          <div className="cell-header"><span className="cell-pill">.01</span></div>
+          <h3 className="cell-title">Basic <br/><em>Subscription</em></h3>
+          <div style={{marginTop: 'auto'}}>
+            <div className="cell-label">MONTHLY RESERVATION</div>
+            <div className="cell-value">$49</div>
+            <p className="cell-desc">Cancel anytime. Standard shipping included.</p>
+          </div>
+        </div>
+        <div className="rigid-cell">
+          <div className="cell-top-right">CURATED GEAR &<br/>LIFESTYLE ITEMS</div>
+          <div className="cell-bottom-right">
+             <button className="rigid-btn">Reserve Basic +</button>
+          </div>
+        </div>
+        <div className="rigid-cell empty-cell"></div>
+        <div className="rigid-cell empty-cell"></div>
+
+        {/* Row 2: Pro */}
+        <div className="rigid-cell empty-cell"></div>
+        <div className="rigid-cell empty-cell"></div>
+        <div className="rigid-cell">
+          <div className="cell-header"><span className="cell-pill">.02</span></div>
+          <h3 className="cell-title">Pro <br/><em>Subscription</em></h3>
+          <div style={{marginTop: 'auto'}}>
+            <div className="cell-label">MONTHLY RESERVATION</div>
+            <div className="cell-value">$149</div>
+            <p className="cell-desc">Cancel anytime. Priority shipping included.</p>
+          </div>
+        </div>
+        <div className="rigid-cell">
+          <div className="cell-top-right">EXCLUSIVE PARTS &<br/>LIMITED EDITIONS</div>
+          <div className="cell-bottom-right">
+             <button className="rigid-btn">Reserve Pro +</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Nothing Style Navigation */}
+      <NothingNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
     </div>
+    </>
   );
 }
 
