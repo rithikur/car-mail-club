@@ -39,12 +39,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 80%;
-  width: 100%;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
 }
 
 .nothing-brand {
+  position: absolute;
+  top: 4rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   letter-spacing: 2px;
@@ -56,12 +59,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 4rem;
 }
 
 .nothing-link {
   font-family: var(--font-display);
-  font-size: 6rem;
+  font-size: 4vw;
+  font-weight: 900;
   color: var(--text-main);
   text-decoration: none;
   text-transform: uppercase;
@@ -76,9 +80,10 @@
 }
 
 .nothing-footer {
+  position: absolute;
+  bottom: 4rem;
   display: flex;
   gap: 2rem;
-  margin-top: auto;
 }
 
 .nothing-footer a {

@@ -12,6 +12,7 @@ import NothingNav from './components/NothingNav/NothingNav';
 import Preloader from './components/Preloader/Preloader';
 import ProcessSection from './components/ProcessSection/ProcessSection';
 import SplashCursor from './components/SplashCursor/SplashCursor';
+import MagicBento from './components/MagicBento/MagicBento';
 import './index.css';
 
 function App() {
@@ -227,46 +228,15 @@ function App() {
          </h2>
       </section>
 
-      {/* Pricing / Reserve Now */}
-      <section id="pricing" className="rigid-grid" style={{ borderTop: 'none' }}>
-        {/* Row 1: Basic */}
-        <div className="rigid-cell">
-          <div className="cell-header"><span className="cell-pill">.01</span></div>
-          <h3 className="cell-title">Basic <br/><em>Subscription</em></h3>
-          <div style={{marginTop: 'auto'}}>
-            <div className="cell-label">MONTHLY RESERVATION</div>
-            <div className="cell-value">$49</div>
-            <p className="cell-desc">Cancel anytime. Standard shipping included.</p>
-          </div>
-        </div>
-        <div className="rigid-cell">
-          <div className="cell-top-right">CURATED GEAR &<br/>LIFESTYLE ITEMS</div>
-          <div className="cell-bottom-right">
-             <button className="rigid-btn">Reserve Basic +</button>
-          </div>
-        </div>
-        <div className="rigid-cell empty-cell"></div>
-        <div className="rigid-cell empty-cell"></div>
-
-        {/* Row 2: Pro */}
-        <div className="rigid-cell empty-cell"></div>
-        <div className="rigid-cell empty-cell"></div>
-        <div className="rigid-cell">
-          <div className="cell-header"><span className="cell-pill">.02</span></div>
-          <h3 className="cell-title">Pro <br/><em>Subscription</em></h3>
-          <div style={{marginTop: 'auto'}}>
-            <div className="cell-label">MONTHLY RESERVATION</div>
-            <div className="cell-value">$149</div>
-            <p className="cell-desc">Cancel anytime. Priority shipping included.</p>
-          </div>
-        </div>
-        <div className="rigid-cell">
-          <div className="cell-top-right">EXCLUSIVE PARTS &<br/>LIMITED EDITIONS</div>
-          <div className="cell-bottom-right">
-             <button className="rigid-btn">Reserve Pro +</button>
-          </div>
-        </div>
-      </section>
+      {/* Pricing / Reserve Now via MagicBento */}
+      <MagicBento 
+        enableStars={true}
+        enableSpotlight={true}
+        enableBorderGlow={true}
+        enableTilt={true}
+        enableMagnetism={false}
+        clickEffect={true}
+      />
 
       {/* Nothing Style Navigation */}
       <NothingNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />

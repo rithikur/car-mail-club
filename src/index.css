@@ -445,11 +445,69 @@ body {
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: 12px; /* rounded corners matching reference */
 }
 
 .rigid-btn:hover {
   background: #ccc;
 }
+
+/* 2-Column Span Tier Card */
+.rigid-cell.span-2 {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  transition: background 0.5s ease;
+  cursor: pointer;
+}
+
+.rigid-cell.span-2:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.02) 100%);
+}
+
+.tier-content-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 3rem;
+  border-right: 1px solid var(--border-color);
+  position: relative;
+}
+
+/* Restore the middle intersection dot */
+.tier-content-left::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 5px;
+  height: 5px;
+  background: #fff;
+  z-index: 10;
+}
+
+.tier-content-right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  padding: 3rem;
+}
+
+.tier-content-right .cell-top-right {
+  top: 3rem;
+  right: 3rem;
+}
+
+.tier-content-right .cell-bottom-right {
+  bottom: 3rem;
+  right: 3rem;
+}
+
+/* Manual Overrides for complex spans */
+.no-right-border { border-right: none !important; }
+.hide-dot::after { display: none !important; }
 
 /* Contact / Select Model */
 .contact-section {
