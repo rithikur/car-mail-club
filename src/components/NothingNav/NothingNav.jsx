@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import ScrambleText from '../ScrambleText/ScrambleText';
 import './NothingNav.css';
 
 const navItems = [
@@ -39,9 +38,13 @@ export default function NothingNav({ isOpen, onClose }) {
 
   return (
     <div className="nothing-nav-overlay" ref={overlayRef}>
-      <button className="nothing-close-btn" onClick={onClose}>
-        {isOpen && <ScrambleText text="[ CLOSE ]" speed={40} delay={100} />}
-      </button>
+      <div className="nothing-header-center">
+        <div className="nothing-logo">CAR MAIL CLUB</div>
+        <button className="nothing-close-btn" onClick={onClose}>
+          <div className="burger-line-cross-1"></div>
+          <div className="burger-line-cross-2"></div>
+        </button>
+      </div>
       <div className="nothing-nav-content">
         <div className="nothing-brand"></div>
         <nav className="nothing-links">

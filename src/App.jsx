@@ -4,22 +4,23 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DotGrid from './components/DotGrid/DotGrid';
 import GooeyNav from './components/GooeyNav/GooeyNav';
+import ScrollFloat from './components/ScrollFloat/ScrollFloat';
 import BlurText from './components/BlurText/BlurText';
-import ScrollReveal from './components/ScrollReveal/ScrollReveal';
 import MagicRings from './components/MagicRings/MagicRings';
 import ScrambleText from './components/ScrambleText/ScrambleText';
 import NothingNav from './components/NothingNav/NothingNav';
 import Preloader from './components/Preloader/Preloader';
 import ProcessSection from './components/ProcessSection/ProcessSection';
+import QnASection from './components/QnASection/QnASection';
 import SplashCursor from './components/SplashCursor/SplashCursor';
 import MagicBento from './components/MagicBento/MagicBento';
+import TrueFocus from './components/TrueFocus/TrueFocus';
+import FooterSection from './components/FooterSection/FooterSection';
 import './index.css';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const marqueeRef = useRef(null);
-  const marqueeTextRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -39,19 +40,7 @@ function App() {
     gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
 
-    // Marquee Animation
-    if (marqueeTextRef.current) {
-      gsap.to(marqueeTextRef.current, {
-        xPercent: -50,
-        ease: "none",
-        scrollTrigger: {
-          trigger: marqueeRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1
-        }
-      });
-    }
+
 
     return () => {
       lenis.destroy();
@@ -64,10 +53,7 @@ function App() {
     <>
       {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
       
-      {/* Global Grid Overlay */}
-      <div className="global-grid-lines">
-        <div></div><div></div><div></div><div></div>
-      </div>
+
 
       <div className="app-container">
         {/* Dynamic Background */}
@@ -87,10 +73,13 @@ function App() {
 
       {/* Header */}
       <header className="header">
-        <div className="logo">CAR MAIL CLUB</div>
-        <button className="menu-btn" onClick={() => setIsNavOpen(true)}>
-          <ScrambleText text="MODELS +" speed={40} delay={500} />
-        </button>
+        <div className="header-center">
+          <div className="logo">CAR MAIL CLUB</div>
+          <button className="menu-btn hamburger-icon" onClick={() => setIsNavOpen(true)}>
+            <div className="burger-line"></div>
+            <div className="burger-line"></div>
+          </button>
+        </div>
       </header>
 
       {/* Main Hero Section */}
@@ -102,16 +91,28 @@ function App() {
           TRANSPARENT={true}
           SPLAT_RADIUS={0.3}
         />
+        <div className="hero-stars"></div>
         <div className="hero-content">
-          <BlurText
-            text="ENGINEERED TO PERFECTION"
-            delay={150}
-            animateBy="words"
-            direction="top"
+          <TrueFocus 
+            sentence="ENGINEERED TO PERFECTION"
+            manualMode={false}
+            blurAmount={6}
+            borderColor="#ffffff"
+            glowColor="rgba(255, 255, 255, 0.4)"
+            animationDuration={0.6}
+            pauseBetweenAnimations={1.5}
             className="hero-title"
           />
           <div className="hero-subtitle">
             <ScrambleText text="[ SECTOR 07 // AUTOMOTIVE EXCELLENCE ]" speed={30} delay={1000} />
+          </div>
+          
+          <div className="draw-arrow-scroll">
+            <span className="scroll-label">EXPLORE</span>
+            <svg viewBox="0 0 24 40" fill="none" stroke="#fff" strokeWidth="1.5">
+              <path className="arrow-shaft" d="M12 0v38" />
+              <path className="arrow-head" d="M4 30l8 8 8-8" />
+            </svg>
           </div>
         </div>
       </main>
@@ -144,22 +145,26 @@ function App() {
           />
         </div>
         <div className="about-content">
-          <ScrollReveal
-            baseOpacity={0}
-            enableBlur={true}
-            baseRotation={0}
-            blurStrength={20}
+          <ScrollFloat
+            animationDuration={1}
+            ease="back.out(1.5)"
+            scrollStart="top bottom-=10%"
+            scrollEnd="bottom center"
+            stagger={0.015}
             textClassName="about-reveal-text"
           >
             "Cars have always interested you? Our genes have been influenced by cars. It cannot be avoided."
-          </ScrollReveal>
+          </ScrollFloat>
         </div>
       </section>
 
       {/* Horizontal Marquee Section */}
-      <section className="marquee-section" ref={marqueeRef}>
-        <div className="marquee-container" ref={marqueeTextRef}>
-          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE — UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE — </div>
+      <section className="marquee-section">
+        <div className="marquee-container">
+          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE —</div>
+          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE —</div>
+          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE —</div>
+          <div className="marquee-text">UNCOMPROMISING DESIGN — RELENTLESS PERFORMANCE —</div>
         </div>
       </section>
 
@@ -218,16 +223,6 @@ function App() {
         </div>
       </section>
       
-      {/* How it Works / Process */}
-      <ProcessSection />
-      
-      {/* Contact / Select Model */}
-      <section id="contact" className="contact-section">
-         <h2 className="hero-title" style={{ textAlign: 'center', lineHeight: '0.8' }}>
-            SELECTING<br/>MODEL
-         </h2>
-      </section>
-
       {/* Pricing / Reserve Now via MagicBento */}
       <MagicBento 
         enableStars={true}
@@ -236,10 +231,27 @@ function App() {
         enableTilt={true}
         enableMagnetism={false}
         clickEffect={true}
+        particleCount={40}
       />
+
+      {/* Contact / Select Model */}
+      <section id="contact" className="contact-section">
+         <h2 className="hero-title" style={{ textAlign: 'center', lineHeight: '0.8' }}>
+            SELECTING<br/>MODEL
+         </h2>
+      </section>
+
+      {/* How it Works / Process */}
+      <ProcessSection />
+
+      {/* QnA Section */}
+      <QnASection />
 
       {/* Nothing Style Navigation */}
       <NothingNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
+      
+      <FooterSection />
+
     </div>
     </>
   );

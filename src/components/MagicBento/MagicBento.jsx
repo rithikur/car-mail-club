@@ -1,5 +1,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { gsap } from 'gsap';
+import PillButton from '../PillButton/PillButton';
+import TextType from '../TextType/TextType';
 import './MagicBento.css';
 
 const DEFAULT_PARTICLE_COUNT = 12;
@@ -26,7 +28,7 @@ const pricingData = [
   }
 ];
 
-const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
+const createParticleElement = (xPercent, yPercent, color = DEFAULT_GLOW_COLOR) => {
   const el = document.createElement('div');
   el.className = 'particle';
   el.style.cssText = `
@@ -38,8 +40,8 @@ const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
     box-shadow: 0 0 10px rgba(${color}, 1), 0 0 20px rgba(${color}, 0.8);
     pointer-events: none;
     z-index: 100;
-    left: ${x}px;
-    top: ${y}px;
+    left: ${xPercent}%;
+    top: ${yPercent}%;
   `;
   return el;
 };
@@ -82,9 +84,8 @@ const ParticleCard = ({
   const initializeParticles = useCallback(() => {
     if (particlesInitialized.current || !cardRef.current) return;
 
-    const { width, height } = cardRef.current.getBoundingClientRect();
     memoizedParticles.current = Array.from({ length: particleCount }, () =>
-      createParticleElement(Math.random() * width, Math.random() * height, glowColor)
+      createParticleElement(Math.random() * 100, Math.random() * 100, glowColor)
     );
     particlesInitialized.current = true;
   }, [particleCount, glowColor]);
@@ -471,7 +472,23 @@ const MagicBento = ({
         />
       )}
 
-      <section id="pricing" className="bento-section rigid-grid" ref={gridRef} style={{ borderTop: 'none' }}>
+      <section id="pricing" className="rigid-grid" ref={gridRef}>
+        
+        {/* SUBSCRIBE Heading Cell */}
+        <div className="rigid-cell no-right-border hide-dot" style={{ gridColumn: 'span 4', gridRow: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', padding: '4rem 0', overflow: 'hidden' }}>
+           <h2 className="qna-title" style={{ fontSize: 'clamp(6rem, 15vw, 20rem)', margin: 0, textAlign: 'center', wordBreak: 'keep-all' }}>
+             <TextType 
+               text={["SUBSCRIBE", "UPGRADE", "RESERVE"]}
+               typingSpeed={100}
+               deletingSpeed={50}
+               pauseDuration={3000}
+               showCursor={true}
+               cursorCharacter="_"
+               startOnVisible={true}
+             />
+           </h2>
+        </div>
+
         {pricingData.map((tier, index) => {
           const isBasic = index === 0;
           const baseClassName = `magic-bento-card ${enableBorderGlow ? 'magic-bento-card--border-glow' : ''} rigid-cell span-2 ${!isBasic ? 'no-right-border hide-dot' : ''}`;
@@ -481,7 +498,7 @@ const MagicBento = ({
             style: {
               '--glow-color': glowColor,
               gridColumn: isBasic ? '1 / span 2' : '3 / span 2',
-              gridRow: isBasic ? '1' : '2'
+              gridRow: isBasic ? '2' : '3'
             }
           };
 
@@ -503,7 +520,7 @@ const MagicBento = ({
                   ))}
                 </div>
                 <div className="cell-bottom-right">
-                   <button className="rigid-btn">Reserve {tier.tier} +</button>
+                   <PillButton label={`Reserve ${tier.tier} +`} />
                 </div>
               </div>
             </>
@@ -534,10 +551,10 @@ const MagicBento = ({
         })}
 
         {/* Empty cells to maintain 4-column rigid grid layout */}
-        <div className="rigid-cell empty-cell" style={{ gridColumn: 3, gridRow: 1 }}></div>
-        <div className="rigid-cell empty-cell no-right-border hide-dot" style={{ gridColumn: 4, gridRow: 1 }}></div>
-        <div className="rigid-cell empty-cell" style={{ gridColumn: 1, gridRow: 2 }}></div>
-        <div className="rigid-cell empty-cell" style={{ gridColumn: 2, gridRow: 2 }}></div>
+        <div className="rigid-cell empty-cell" style={{ gridColumn: 3, gridRow: 2 }}></div>
+        <div className="rigid-cell empty-cell no-right-border hide-dot" style={{ gridColumn: 4, gridRow: 2 }}></div>
+        <div className="rigid-cell empty-cell" style={{ gridColumn: 1, gridRow: 3 }}></div>
+        <div className="rigid-cell empty-cell" style={{ gridColumn: 2, gridRow: 3 }}></div>
       </section>
     </>
   );

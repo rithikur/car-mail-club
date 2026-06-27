@@ -1,0 +1,116 @@
+.qna-section {
+  background: var(--bg-color);
+  z-index: 5;
+  overflow: hidden;
+}
+
+.qna-rays-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.qna-header-cell {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center it vertically */
+  align-items: center; /* Center it horizontally */
+  overflow: hidden; /* Ensure huge text doesn't break layout */
+}
+
+.qna-title {
+  font-family: var(--font-display);
+  font-size: clamp(10rem, 25vw, 30rem); /* Massive font size to fill the box */
+  line-height: 0.8;
+  margin: 0;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: -5px;
+  text-align: center;
+  word-break: break-all;
+}
+
+.qna-header-cell .cell-desc {
+  margin-top: 1rem;
+  letter-spacing: 5px;
+}
+
+.qna-list-cell {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 0;
+  display: flex;
+}
+
+.qna-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.qna-item {
+  border-bottom: 1px solid var(--border-color);
+  padding: 2.5rem 3rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.qna-item:last-child {
+  border-bottom: none;
+}
+
+.qna-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.qna-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--text-main);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.qna-icon {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+}
+
+.qna-item.active .qna-icon {
+  color: var(--text-main);
+}
+
+.qna-answer p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  max-width: 85%;
+}
+
+@media (max-width: 1024px) {
+  .qna-question {
+    font-size: 1.4rem;
+  }
+}
