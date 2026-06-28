@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Suspense, lazy } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,14 +9,15 @@ import BlurText from './components/BlurText/BlurText';
 import MagicRings from './components/MagicRings/MagicRings';
 import ScrambleText from './components/ScrambleText/ScrambleText';
 import NothingNav from './components/NothingNav/NothingNav';
-import Preloader from './components/Preloader/Preloader';
-import ProcessSection from './components/ProcessSection/ProcessSection';
-import QnASection from './components/QnASection/QnASection';
 import SplashCursor from './components/SplashCursor/SplashCursor';
-import MagicBento from './components/MagicBento/MagicBento';
 import TrueFocus from './components/TrueFocus/TrueFocus';
-import FooterSection from './components/FooterSection/FooterSection';
 import './index.css';
+
+const Preloader = lazy(() => import('./components/Preloader/Preloader'));
+const ProcessSection = lazy(() => import('./components/ProcessSection/ProcessSection'));
+const QnASection = lazy(() => import('./components/QnASection/QnASection'));
+const MagicBento = lazy(() => import('./components/MagicBento/MagicBento'));
+const FooterSection = lazy(() => import('./components/FooterSection/FooterSection'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,11 +52,24 @@ function App() {
 
   return (
     <>
-      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+      <Suspense fallback={null}>
+        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+      </Suspense>
       
 
 
       <div className="app-container">
+        {/* Global Splash Cursor */}
+        <div className="global-cursor">
+          <SplashCursor 
+            RAINBOW_MODE={false} 
+            COLOR="#ffffff" 
+            BACK_COLOR={{r: 0, g: 0, b: 0}}
+            TRANSPARENT={true}
+            SPLAT_RADIUS={0.3}
+          />
+        </div>
+
         {/* Dynamic Background */}
         <div className="dot-grid-container">
         <DotGrid
@@ -84,13 +98,6 @@ function App() {
 
       {/* Main Hero Section */}
       <main className="hero">
-        <SplashCursor 
-          RAINBOW_MODE={false} 
-          COLOR="#ffffff" 
-          BACK_COLOR={{r: 0, g: 0, b: 0}}
-          TRANSPARENT={true}
-          SPLAT_RADIUS={0.3}
-        />
         <div className="hero-stars"></div>
         <div className="hero-content">
           <TrueFocus 
@@ -193,30 +200,30 @@ function App() {
       {/* The Boxes / Inside Section */}
       <section id="the-boxes" className="bento-section">
         <div className="bento-header">
-           <h2 className="massive-text">INSIDE THE BOX</h2>
+           <h2 className="massive-text" aria-label="Inside the Box">INSIDE THE BOX</h2>
         </div>
         <div className="bento-grid">
            <div className="bento-item item-large">
-              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop" alt="Precision Gear" />
-              <div className="bento-overlay">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=70&w=800&auto=format&fit=crop" alt="Precision Gear" loading="lazy" />
+              <div className="bento-overlay" aria-hidden="true">
                  <ScrambleText text="[ 01 // EXCLUSIVE PARTS ]" speed={30} delay={0} />
               </div>
            </div>
            <div className="bento-item item-small offset-down">
-              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1964&auto=format&fit=crop" alt="Accessories" />
-              <div className="bento-overlay">
+              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=70&w=800&auto=format&fit=crop" alt="Accessories" loading="lazy" />
+              <div className="bento-overlay" aria-hidden="true">
                  <ScrambleText text="[ 02 // LIFESTYLE GEAR ]" speed={30} delay={200} />
               </div>
            </div>
            <div className="bento-item item-small">
-              <img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=1974&auto=format&fit=crop" alt="Magazine" />
-              <div className="bento-overlay">
+              <img src="https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=70&w=800&auto=format&fit=crop" alt="Magazine" loading="lazy" />
+              <div className="bento-overlay" aria-hidden="true">
                  <ScrambleText text="[ 03 // CURATED READS ]" speed={30} delay={400} />
               </div>
            </div>
            <div className="bento-item item-wide">
-              <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?q=80&w=2071&auto=format&fit=crop" alt="Detailing" />
-              <div className="bento-overlay">
+              <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?q=70&w=800&auto=format&fit=crop" alt="Detailing" loading="lazy" />
+              <div className="bento-overlay" aria-hidden="true">
                  <ScrambleText text="[ 04 // DETAILING KITS ]" speed={30} delay={600} />
               </div>
            </div>
@@ -224,15 +231,17 @@ function App() {
       </section>
       
       {/* Pricing / Reserve Now via MagicBento */}
-      <MagicBento 
-        enableStars={true}
-        enableSpotlight={true}
-        enableBorderGlow={true}
-        enableTilt={true}
-        enableMagnetism={false}
-        clickEffect={true}
-        particleCount={40}
-      />
+      <Suspense fallback={<div style={{height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Loading...</div>}>
+        <MagicBento 
+          enableStars={true}
+          enableSpotlight={true}
+          enableBorderGlow={true}
+          enableTilt={true}
+          enableMagnetism={false}
+          clickEffect={true}
+          particleCount={40}
+        />
+      </Suspense>
 
       {/* Contact / Select Model */}
       <section id="contact" className="contact-section">
@@ -242,15 +251,21 @@ function App() {
       </section>
 
       {/* How it Works / Process */}
-      <ProcessSection />
+      <Suspense fallback={null}>
+        <ProcessSection />
+      </Suspense>
 
       {/* QnA Section */}
-      <QnASection />
+      <Suspense fallback={null}>
+        <QnASection />
+      </Suspense>
 
       {/* Nothing Style Navigation */}
       <NothingNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
       
-      <FooterSection />
+      <Suspense fallback={null}>
+        <FooterSection />
+      </Suspense>
 
     </div>
     </>
